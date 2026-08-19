@@ -52,15 +52,9 @@ function treeToHTML(node){
 // GitHub API'den tüm dosya ağacını çeker (sadece .md ve icerik klasörü).
 async function fetchNotePaths(cfg){
   var url = "https://api.github.com/repos/"+cfg.owner+"/"+cfg.repo
-          + "/git/trees/"+cfg.branch+"?recursive=1";
+          + "/git/trees/"+cfg.branch+"?recursive=1&t="+Date.now();  // taze liste
 
-  // aynı ziyarette tekrar tekrar çağırmamak için küçük önbellek
-  try{
-    var cached = sessionStorage.getItem("tree:"+url);
-    if(cached) return JSON.parse(cached);
-  }catch(e){}
-
-  var res = await fetch(url);
+  var res = await fetch(url, { cache: "no-store" });
   if(!res.ok) throw new Error("API "+res.status);
   var data = await res.json();
   var prefix = cfg.root + "/";
@@ -68,7 +62,6 @@ async function fetchNotePaths(cfg){
     .filter(function(x){ return x.type==="blob" && x.path.indexOf(prefix)===0 && /\.md$/i.test(x.path); })
     .map(function(x){ return x.path.slice(prefix.length); });  // icerik/ önekini at
 
-  try{ sessionStorage.setItem("tree:"+url, JSON.stringify(paths)); }catch(e){}
   return paths;
 }
 
@@ -102,7 +95,9 @@ async function renderNote(cfg, titleId, contentId, crumbId){
 
   try{
     // içerik aynı repoda olduğu için doğrudan (aynı origin) çekilir
-    var res = await fetch(cfg.root.split("/").pop() + "/" + f); // "icerik/<yol>"
+    // ?t= ile her seferinde taze sürüm alınır (tarayıcı önbelleğini atla)
+    var src = cfg.root.split("/").pop() + "/" + f + "?t=" + Date.now();
+    var res = await fetch(src, { cache: "no-store" });
     if(!res.ok) throw new Error(res.status);
     var md = await res.text();
     contentEl.innerHTML = marked.parse(md);
