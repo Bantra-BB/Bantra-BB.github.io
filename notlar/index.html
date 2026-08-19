@@ -17,24 +17,25 @@
 
   <div class="term-bar">
     <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-    <span class="term-title">~/bilgi-bankasi — cat notes/*</span>
+    <span class="term-title">~/bilgi-bankasi — tree</span>
   </div>
   <div class="term-body">
-    <div class="prompt">cat ~/bilgi-bankasi/*</div>
+    <div class="prompt">tree ~/bilgi-bankasi</div>
     <h1>Bilgi Bankası</h1>
     <p class="tagline">Çalışma notları, cheat-sheet'ler ve öğrendiklerimin dökümü.</p>
   </div>
 
   <section>
     <h2>konular</h2>
-    <div class="grid" id="liste"></div>
+    <!-- klasör ağacı GitHub'dan otomatik oluşturulur -->
+    <div id="agac"><p class="dim"># yükleniyor…</p></div>
   </section>
 
   <footer><a href="../index.html">← ana sayfaya dön</a></footer>
 </div>
 
-<script src="posts.js"></script>
-<script src="../assets/app.js"></script>
-<script>renderList(POSTS, "liste");</script>
+<script src="config.js"></script>
+<script src="../assets/repo-notes.js"></script>
+<script>renderNotesTree(NOTES_CONFIG, "agac");</script>
 </body>
 </html>

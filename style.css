@@ -174,3 +174,26 @@ footer{ margin-top:64px; color:var(--muted); font-size:12px; text-align:center; 
 /* yatay çizgi ve görsel */
 .markdown hr{ border:none; border-top:1px solid var(--line); margin:24px 0; }
 .markdown img{ max-width:100%; border-radius:6px; border:1px solid var(--line); }
+
+/* =========================================================
+   KLASÖR AĞACI  —  bilgi bankası listesi
+   ========================================================= */
+.tree-folder{ margin:6px 0; }
+.tree-folder > summary{
+  cursor:pointer; list-style:none; padding:8px 12px;
+  background:var(--surface); border:1px solid var(--line); border-radius:6px;
+  color:var(--accent); font-weight:700; user-select:none;
+  transition:border-color .15s, background .15s;
+}
+.tree-folder > summary:hover{ border-color:var(--accent); background:var(--surface-2); }
+.tree-folder > summary::before{ content:"▸ "; color:var(--muted); }
+.tree-folder[open] > summary::before{ content:"▾ "; }
+.tree-folder > summary::-webkit-details-marker{ display:none; }   /* varsayılan oku gizle */
+.tree-inner{ margin:6px 0 6px 18px; border-left:1px solid var(--line); padding-left:12px; }
+.tree-file{
+  display:block; padding:7px 12px; margin:4px 0; border-radius:6px;
+  background:var(--surface); border:1px solid var(--line); color:var(--text);
+  transition:border-color .15s, background .15s, color .15s;
+}
+.tree-file::before{ content:"$ "; color:var(--muted); }
+.tree-file:hover{ border-color:var(--accent-2); background:var(--surface-2); color:#eafff4; text-decoration:none; }

@@ -19,7 +19,7 @@
     <span class="term-title">~/bilgi-bankasi — cat</span>
   </div>
   <div class="term-body">
-    <div class="prompt">cat not.md</div>
+    <div class="prompt">cat <span id="crumb"></span></div>
     <h1 id="baslik">yükleniyor…</h1>
   </div>
 
@@ -29,8 +29,8 @@
 </div>
 
 <script src="../assets/marked.min.js"></script>
-<script src="posts.js"></script>
-<script src="../assets/app.js"></script>
-<script>renderPost(POSTS, "baslik", "icerik");</script>
+<script src="config.js"></script>
+<script src="../assets/repo-notes.js"></script>
+<script>renderNote(NOTES_CONFIG, "baslik", "icerik", "crumb");</script>
 </body>
 </html>
