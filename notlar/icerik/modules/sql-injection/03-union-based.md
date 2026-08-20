@@ -91,3 +91,8 @@ Son olarak kullanıcı bilgileri users tablosundan elde edildi.
 <img width="1229" height="865" alt="{28C74637-8229-426C-A5F8-A97DEDFB211E}" src="images/union-sql8.png" />
 
 Admin olarak giriş yapıldığından lab tamamlandı.
+
+### Aynı Sütunda Birden Çok Veri Almak
+
+Diğer lab'larda olduğu gibi öncelikle sütun sayısı ve string ifadesi döndüren sütun tespit edildi. Ardından veri döndüren sütundan kullanıcı adı ve şifre bilgilerini elde etmek için `'UNION SELECT NULL, username || ':' || password FROM users --` payload'ı kullanıldı ve admin kullanıcı bilgileri elde edildi.
+<img width="1213" height="774" alt="{E3D7466D-E7B8-42B1-88CC-05F3E755D28C}" src="images/union-sql9.png" />
