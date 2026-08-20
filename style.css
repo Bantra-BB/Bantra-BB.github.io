@@ -173,7 +173,15 @@ footer{ margin-top:64px; color:var(--muted); font-size:12px; text-align:center; 
 .markdown th{ background:var(--surface); color:var(--accent); }
 /* yatay çizgi ve görsel */
 .markdown hr{ border:none; border-top:1px solid var(--line); margin:24px 0; }
-.markdown img{ max-width:100%; border-radius:6px; border:1px solid var(--line); }
+.markdown img{
+  max-width:100%;
+  height:auto !important;        /* sabit height="..." değerini ez, orantıyı koru */
+  width:auto;                    /* geniş görseller içerik genişliğine sığar */
+  display:block;
+  margin:16px auto;              /* ortala */
+  border-radius:6px;
+  border:1px solid var(--line);
+}
 
 /* =========================================================
    KLASÖR AĞACI  —  bilgi bankası listesi
