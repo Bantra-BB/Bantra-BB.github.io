@@ -1,4 +1,4 @@
-# SQL Injection Nedir?
+# SQL Injection
 
 ## Web uygulaması ile veritabanı ilişkisi
 Bir web uygulaması kullanıcıdan veri aldığında (login formu, arama
@@ -85,12 +85,16 @@ Uygulama genelde ilk satırı (çoğu zaman admin) alıp giriş yaptırır.
 $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ? AND password = ?");
 $stmt->execute([$username, $password]);
 ```
-Burada kullanıcı girdisi **hiçbir zaman sorgu metni olarak
-yorumlanmaz** — veritabanı motoruna "bu bir değer, kod değil" diye
-baştan bildirilir. Tek tırnak göndersen bile, düz bir karakter olarak
-işlenir, sorgu yapısını değiştiremez. SQL injection'a karşı asıl kalıcı
-savunma budur; birazdan göreceğimiz tüm enjeksiyon türleri, bu
-korumanın olmadığı yerlerde çalışır.
+Burada kullanıcı girdisi **hiçbir zaman sorgu metni olarak yorumlanmaz** — veritabanı motoruna "bu bir değer, kod değil" diye baştan bildirilir. Tek tırnak göndersen bile, düz bir karakter olarak işlenir, sorgu yapısını değiştiremez. SQL injection'a karşı asıl kalıcı savunma budur; birazdan göreceğimiz tüm enjeksiyon türleri, bu korumanın olmadığı yerlerde çalışır.
+
+## Veri Tabanı İçeriğini Listeleme
+
+Oracle dışındaki diğer veri tabanı tiplerinde veri tabanı hakkında bilgi edinebilmek için information_schema kullanılır.
+```sql
+information_schema.tabels   -- Tablolar hakkında bilgiler çağırmak için kullanılır.
+SELECT * FROM information_schema.tables   -- Veri tabanında bulunan tabloları listeler.
+SELECT * FROM information_schema.tabels WHERE table_name='users'   -- Şeklinde bir sorgu ile users tablosunda bulunan veriler çağıralabilinir.
+```
 
 # Labs
 ## Retrieving Hidden Data
@@ -129,3 +133,18 @@ Ardından veri tabanı tipi ve versiyonunu bulmak için `'UNION+SELECT+@@version
 <img width="624" height="353" alt="image" src="images/sqli9.png" />
 
 <img width="1168" height="671" alt="{7BCB5938-E5A6-4C7D-92C7-ECBC1DF132B1}" src="images/sqli10.png" />
+
+## Listing the Database Contents
+
+Lab'ın başlangıcında çağırılan tabloda kaç adet sütun olduğunun ve hangi sütunların string ifadesi döndürdüğü test edildi. İki sütun olduğu ve ikisinin de kullanışlı bir string ifadesi olduğu gözlemlendi.
+<img width="1330" height="715" alt="{D6AA98FB-AF85-4EAE-97AB-81A0C60F8C98}" src="images/sqli11.png" />
+
+`'UNION SELECT table_name FROM information_schema.tables --` sorgusu ile veri tabanında bulunan tablolar listelendi. Tablolar incelendiğinde users_bkpmse tablosu kullanıcı bilgilerini içerebileceği için gözüme çarptı.
+<img width="1222" height="995" alt="{346111BB-FE0B-413C-806F-CCE24001B64C}" src="images/sqli12.png" />
+
+`'UNION SELECT cloumn_name FROM information_schema.columns WHERE table_name=users_bkpmse --` sorgusu ile tablonun sütunları listelendi.
+<img width="1401" height="838" alt="{383F1DE4-B7E5-43AD-9DD5-50FF8E0414D3}" src="images/sqli13.png" />
+
+Web uygulaması iki farklı çıktı alabilecek bir yapıda olduğunu tespit etmiştik o yüzden kullanıcı adı ve şifreyi ayrı ayrı alacağım ama istenirse tek çıktıdan da alınabilinir.
+<img width="1244" height="893" alt="{10C58A81-5508-494B-B5CA-84480EA05398}" src="images/sqli14.png" />
+
