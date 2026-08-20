@@ -197,3 +197,24 @@ footer{ margin-top:64px; color:var(--muted); font-size:12px; text-align:center; 
 }
 .tree-file::before{ content:"$ "; color:var(--muted); }
 .tree-file:hover{ border-color:var(--accent-2); background:var(--surface-2); color:#eafff4; text-decoration:none; }
+
+/* =========================================================
+   KOD BLOKLARI  —  ince kaydırma çubuğu + sözdizimi renkleri
+   ========================================================= */
+/* ince, temaya uygun kaydırma çubuğu (yatay uzun kod satırları için) */
+.markdown pre::-webkit-scrollbar{ height:8px; }
+.markdown pre::-webkit-scrollbar-track{ background:transparent; }
+.markdown pre::-webkit-scrollbar-thumb{ background:var(--line); border-radius:4px; }
+.markdown pre::-webkit-scrollbar-thumb:hover{ background:var(--muted); }
+.markdown pre{ scrollbar-width:thin; scrollbar-color:var(--line) transparent; } /* Firefox */
+
+/* highlight.js token renkleri — terminal paletine uyumlu */
+.hljs-keyword, .hljs-selector-tag, .hljs-built_in, .hljs-name{ color:#7dd3fc; }        /* mavi: SELECT, FROM, UNION */
+.hljs-string, .hljs-regexp, .hljs-symbol{ color:var(--warn); }                          /* sarı: 'metin' */
+.hljs-number, .hljs-literal, .hljs-boolean{ color:#f0abfc; }                            /* mor: sayılar */
+.hljs-comment, .hljs-quote{ color:var(--muted); font-style:italic; }                    /* soluk: -- yorum */
+.hljs-function, .hljs-title, .hljs-title.function_{ color:var(--accent); }              /* yeşil: fonksiyon adı */
+.hljs-variable, .hljs-attr, .hljs-property{ color:#c8e6d5; }
+.hljs-meta, .hljs-operator, .hljs-punctuation{ color:var(--muted); }
+.hljs-type, .hljs-class .hljs-title{ color:#5eead4; }
+.hljs-emphasis{ font-style:italic; } .hljs-strong{ font-weight:700; }

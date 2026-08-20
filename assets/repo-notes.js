@@ -21,6 +21,21 @@ function isAbsolute(u){ return /^([a-z]+:|\/\/|\/|data:|#)/i.test(u); }
 
 function qp(name){ return new URLSearchParams(location.search).get(name); }
 
+// highlight.js'i (kod renklendirme) bir kez yükler; hazır olunca söz verir.
+var _hljsPromise = null;
+function ensureHljs(){
+  if(window.hljs) return Promise.resolve(window.hljs);
+  if(_hljsPromise) return _hljsPromise;
+  _hljsPromise = new Promise(function(resolve){
+    var s = document.createElement("script");
+    s.src = "../assets/highlight.min.js";     // view.html alt klasörde olduğu için ../
+    s.onload = function(){ resolve(window.hljs); };
+    s.onerror = function(){ resolve(null); };  // yüklenemezse kod yine görünür, sadece renksiz
+    document.head.appendChild(s);
+  });
+  return _hljsPromise;
+}
+
 // "03-union-based.md" -> "Union Based"  (görünen ad için temizlik)
 function pretty(name){
   return name.replace(/\.md$/i, "")
@@ -138,6 +153,15 @@ async function renderNote(cfg, titleId, contentId, crumbId){
         a.setAttribute("href", "view.html?f=" + encodeURIComponent(target));
       }
     });
+
+    // --- kod bloklarını renklendir (highlight.js) ---
+    var blocks = contentEl.querySelectorAll("pre code");
+    if(blocks.length){
+      var hljs = await ensureHljs();
+      if(hljs){
+        blocks.forEach(function(block){ try{ hljs.highlightElement(block); }catch(e){} });
+      }
+    }
   }catch(err){
     contentEl.innerHTML = '<p class="dim">İçerik yüklenemedi ('+err.message+').</p>';
   }
