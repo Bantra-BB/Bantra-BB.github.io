@@ -1,4 +1,4 @@
-# SQL Injection Nedir?
+<img width="1168" height="671" alt="{7BCB5938-E5A6-4C7D-92C7-ECBC1DF132B1}" src="https://github.com/user-attachments/assets/1d167984-3a21-47a5-9cd8-8b2b771808c9" /># SQL Injection Nedir?
 
 ## Web uygulaması ile veritabanı ilişkisi
 Bir web uygulaması kullanıcıdan veri aldığında (login formu, arama
@@ -96,26 +96,35 @@ korumanın olmadığı yerlerde çalışır.
 ## Retrieving Hidden Data
 
 Uygulamaya giriş yapıldığında bir ürün listesi ve kategoriler ile karşılaşıldı.
-<img width="1464" height="1003" alt="{7D603558-877A-4522-9F56-F220749A5996}" src="https://github.com/user-attachments/assets/382a4abd-2bda-4bdb-b1be-cd5a20759fae" />
+<img width="1464" height="1003" alt="{7D603558-877A-4522-9F56-F220749A5996}" src="images/sqli1.png" />
 
 Herhangi bir kategorinin içine girildiğinde `category='name'` sorgusunun çalıştığı gözlemlendi.
-<img width="728" height="40" alt="{CE7141F5-39ED-492B-9349-1CAE3AA4095F}" src="https://github.com/user-attachments/assets/8a6c9c76-37f7-48ec-a0b1-118c045f74ee" />
+<img width="728" height="40" alt="{CE7141F5-39ED-492B-9349-1CAE3AA4095F}" src="images/sqli2.png" />
 
 Sorgu `'OR 1=1 -- -` payload'ı ile manipüle edildiğinde gizli olan ürünlerin de listelendiği gözlemlendi.
-<img width="1340" height="1000" alt="{59469AD8-549B-4717-8008-0FB630B75194}" src="https://github.com/user-attachments/assets/74794f0f-f78f-45b3-8b7c-a4f835ad8629" />
+<img width="1340" height="1000" alt="{59469AD8-549B-4717-8008-0FB630B75194}" src="images/sqli3.png" />
 
 
 ## Login Bypass
 
 Login sayfası incelendiğinde kullanıcı adı ve password girişi olduğu gözlemlendi.
-<img width="817" height="395" alt="{63566B9E-CD30-455E-96BB-9725E4B6B9DB}" src="https://github.com/user-attachments/assets/3e4b2f19-85c5-438e-9e4d-d2ac5032be76" />
+<img width="817" height="395" alt="{63566B9E-CD30-455E-96BB-9725E4B6B9DB}" src="images/sqli4.png" />
 
 `admin:admin` denemesi yapıldı ve istek incelendi.
-<img width="1256" height="712" alt="image" src="https://github.com/user-attachments/assets/e73704fc-feb0-48ee-b174-fd9ca26541a5" />
+<img width="1256" height="712" alt="image" src="images/sqli5.png" />
 
 İstek burp ile incelendi ve `OR 1=1 -- -` payload'ı ile manipüle edildi (%20 = URL encoded space character)
-<img width="1261" height="782" alt="{0F6295C0-7620-46AD-A531-0A3470C508FA}" src="https://github.com/user-attachments/assets/faad12f0-80e8-4e50-bfc1-f6e11a1d27aa" />
+<img width="1261" height="782" alt="{0F6295C0-7620-46AD-A531-0A3470C508FA}" src="images/sqli6.png" />
 
 Manipüle edildikten sonra istek gönderildiğinde login başarılı bir şekilde bypass edildi ve administrator olarak giriş yapıldı. 
-<img width="1262" height="395" alt="{6E714A2B-0C17-4F1C-B1A8-24CDA0A1E301}" src="https://github.com/user-attachments/assets/c31f5304-352c-4737-9416-e6f0761da788" />
+<img width="1262" height="395" alt="{6E714A2B-0C17-4F1C-B1A8-24CDA0A1E301}" src="images/sqli7.png" />
 
+## Querying the database type and version
+
+Category isteğine burp ile araya girildi ve sorgu `'UNION+SELECT+'abc',+'def'+#` ile manipüle edildi ve hedefe uygulamadan veri alınabilinecek sütunlar tespit edildi.
+<img width="1260" height="451" alt="{A0388619-116F-4468-BF1F-D59F0F0AAF52}" src="images/sqli8.png" />
+
+Ardından veri tabanı tipi ve versiyonunu bulmak için `'UNION+SELECT+@@version,+NULL#` payload'ı ile istek manipüle edildi ve istenilen bilgiler elde edildi.
+<img width="624" height="353" alt="image" src="images/sqli9.png" />
+
+<img width="1168" height="671" alt="{7BCB5938-E5A6-4C7D-92C7-ECBC1DF132B1}" src="images/sqli10.png" />
