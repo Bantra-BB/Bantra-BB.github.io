@@ -5,6 +5,20 @@
    seçilen notu Markdown'dan render eder.
    ========================================================= */
 
+// Göreli bir yolu (rel) bir taban klasöre (baseDir) göre çözer. ../ ve ./ destekler.
+function resolvePath(baseDir, rel){
+  var parts = baseDir ? baseDir.split("/") : [];
+  rel.split("/").forEach(function(seg){
+    if(seg === "" || seg === ".") return;
+    if(seg === "..") parts.pop();
+    else parts.push(seg);
+  });
+  return parts.join("/");
+}
+
+// Bir yolun mutlak/harici olup olmadığını kontrol eder (http, //, /, data:).
+function isAbsolute(u){ return /^([a-z]+:|\/\/|\/|data:|#)/i.test(u); }
+
 function qp(name){ return new URLSearchParams(location.search).get(name); }
 
 // "03-union-based.md" -> "Union Based"  (görünen ad için temizlik)
@@ -96,11 +110,34 @@ async function renderNote(cfg, titleId, contentId, crumbId){
   try{
     // içerik aynı repoda olduğu için doğrudan (aynı origin) çekilir
     // ?t= ile her seferinde taze sürüm alınır (tarayıcı önbelleğini atla)
-    var src = cfg.root.split("/").pop() + "/" + f + "?t=" + Date.now();
+    var contentRoot = cfg.root.split("/").pop();          // "icerik"
+    var src = contentRoot + "/" + f + "?t=" + Date.now();
     var res = await fetch(src, { cache: "no-store" });
     if(!res.ok) throw new Error(res.status);
     var md = await res.text();
     contentEl.innerHTML = marked.parse(md);
+
+    // --- göreli görsel ve link yollarını notun klasörüne göre düzelt ---
+    var noteDir = f.split("/").slice(0, -1).join("/");     // "modules/sql-injection"
+
+    // görseller: icerik/<notun klasörü>/<görsel yolu>
+    contentEl.querySelectorAll("img").forEach(function(img){
+      var raw = img.getAttribute("src") || "";
+      if(raw && !isAbsolute(raw)){
+        var full = contentRoot + "/" + resolvePath(noteDir, raw);
+        img.setAttribute("src", full);
+      }
+      img.setAttribute("loading", "lazy");
+    });
+
+    // notlar arası .md linkleri: görüntüleyiciye yönlendir
+    contentEl.querySelectorAll("a").forEach(function(a){
+      var href = a.getAttribute("href") || "";
+      if(href && !isAbsolute(href) && /\.md($|[?#])/i.test(href)){
+        var target = resolvePath(noteDir, href.replace(/[?#].*$/, ""));
+        a.setAttribute("href", "view.html?f=" + encodeURIComponent(target));
+      }
+    });
   }catch(err){
     contentEl.innerHTML = '<p class="dim">İçerik yüklenemedi ('+err.message+').</p>';
   }
