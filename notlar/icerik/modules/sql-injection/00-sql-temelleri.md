@@ -80,9 +80,3 @@ Bu, iki ayrı SELECT'in sonuçlarını tek bir sonuç listesinde birleştirir.
 UNION, ileride "UNION-based SQL injection" konusunun temelini
 oluşturacak — saldırgan, kendi seçtiği veriyi (parola tablosu gibi)
 orijinal sorgunun sonuçlarına bu şekilde ekler.
-
-## Kaynak
-- SQLZoo: https://sqlzoo.net (0. SELECT basics bölümünü tamamla)
-
-## Sıradaki
-→ `01-sql-injection-nedir.md`
