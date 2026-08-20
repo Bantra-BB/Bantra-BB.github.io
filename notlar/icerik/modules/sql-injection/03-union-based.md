@@ -61,33 +61,33 @@ Bu lab ortamında UNION SELECT NULL sorgusu ile sütun sayısı tespiti yapıld�
 <img width="1185" height="401" alt="{B24E0654-9FF1-4D80-B78D-96C4B6048E78}" src="images/union-sql1.png" />
 
 NULL sayısı arttırıldığında yani `'UNION SELECT NULL, NULL, NULL -- -` sorgusu yapıldığında hata vermediği ve başarılı bir şekilde sorguda 3 sütun olduğu tespit edildi.
-<img width="1260" height="648" alt="{48845B01-9D67-49E1-9683-ACFB1FFC77B3}" src="https://github.com/user-attachments/assets/5e03ebd5-5de4-40d1-b907-7bc1f5bace1c" />
+<img width="1260" height="648" alt="{48845B01-9D67-49E1-9683-ACFB1FFC77B3}" src="images/union-sql2.png" />
 
 ### Kullanışlı Sütunun Tespiti
 
 Bir önceki lab'da olduğu gibi sütun sayısı tespit edildi ardından NULL değerleri yerine string ifade yazıldı ve uygulamanın hata verdiği gözlemlendi.
-<img width="971" height="351" alt="{DD995729-76B4-484C-8D9A-FF4486C83039}" src="https://github.com/user-attachments/assets/fcade3d3-995e-400b-9961-368e1408f088" />
+<img width="971" height="351" alt="{DD995729-76B4-484C-8D9A-FF4486C83039}" src="images/union-sql3.png" />
 
 Ardından bir sonraki NULL değeri ile değiştirilerek tekrar tekrar denendi ve sonunda doğru sonuca ulaşıldı.
-<img width="1221" height="736" alt="{BCCA6263-8F37-4DFD-AFE3-B02C543B8392}" src="https://github.com/user-attachments/assets/67d5b0d8-b260-44a7-82bb-2019bd717b66" />
+<img width="1221" height="736" alt="{BCCA6263-8F37-4DFD-AFE3-B02C543B8392}" src="images/union-sql4.png" />
 
 ### Bilgi Toplama
 
 Bu uygulamada da öncelikle sütun sayısı tespit edildi ve ardından ilgili sütunlar tespit edildi. (Enumeration için birden fazla sütun da kullanılabilinir) 
 
-<img width="1261" height="719" alt="{1769D40F-D522-46F2-817D-CED3FA398334}" src="https://github.com/user-attachments/assets/e552ff05-be51-402d-b085-852fdae18960" />
+<img width="1261" height="719" alt="{1769D40F-D522-46F2-817D-CED3FA398334}" src="images/union-sql5.png" />
 
 Bu sütunlar kullanılarak enumeration işlemine başlandı öncelikle information_schema.tables ile tablo isimleri öğrenildi ve users tablosu tespit edildi.
 
-<img width="1206" height="989" alt="{DAF814D5-94BF-48D9-A5B4-CD749836FB52}" src="https://github.com/user-attachments/assets/99f6dcc4-5d85-41b2-a83d-de4e88231412" />
+<img width="1206" height="989" alt="{DAF814D5-94BF-48D9-A5B4-CD749836FB52}" src="images/union-sql6.png" />
 
 Ardından users tablosuna ait sütun isimleri öğrenildi.
 `'UNION SELECT column_name, 'b' FROM information_schema.columns WHERE table_name='users'--`
 
-<img width="1339" height="873" alt="{22A43710-DB51-4802-BE4A-FC0BC7CC4542}" src="https://github.com/user-attachments/assets/42e2e657-38b1-4fbf-b8c9-ffd19f704b39" />
+<img width="1339" height="873" alt="{22A43710-DB51-4802-BE4A-FC0BC7CC4542}" src="images/union-sql7.png" />
 
 Son olarak kullanıcı bilgileri users tablosundan elde edildi.
 
-<img width="1229" height="865" alt="{28C74637-8229-426C-A5F8-A97DEDFB211E}" src="https://github.com/user-attachments/assets/1370ca54-42c1-4cfa-bccf-9d3000a603dc" />
+<img width="1229" height="865" alt="{28C74637-8229-426C-A5F8-A97DEDFB211E}" src="images/union-sql8.png" />
 
 Admin olarak giriş yapıldığından lab tamamlandı.
