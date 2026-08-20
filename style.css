@@ -35,6 +35,16 @@ a:hover{ text-decoration:underline; }
 
 .wrap{ max-width:820px; margin:0 auto; padding:32px 20px 80px; }
 
+/* kısa yasal uyarı şeridi (disclaimer.js tarafından her sayfaya eklenir) */
+.disclaimer{
+  font-size:12px; line-height:1.6; color:var(--muted);
+  background:rgba(251,191,36,0.06);
+  border:1px solid rgba(251,191,36,0.22);
+  border-left:3px solid var(--warn);
+  border-radius:6px; padding:9px 13px; margin-bottom:22px;
+}
+.disclaimer strong{ color:var(--warn); }
+
 /* ---- üst navigasyon (alt sayfalarda "geri" için) ---- */
 .topnav{
   display:flex; gap:18px; align-items:center;
@@ -130,6 +140,12 @@ p.dim{ color:var(--muted); }
 }
 
 footer{ margin-top:64px; color:var(--muted); font-size:12px; text-align:center; }
+footer .disclaimer{
+  display:inline-block; max-width:620px; margin:12px auto;
+  padding:12px 16px; line-height:1.6;
+  border:1px solid var(--line); border-left:3px solid var(--warn);
+  border-radius:6px; color:var(--muted); text-align:left;
+}
 @media (prefers-reduced-motion:reduce){ .cursor{ animation:none; } }
 
 /* =========================================================
