@@ -58,7 +58,7 @@ Veri tabanı ve generic bir hata mesajı görüntülenebilir o durumda bir sonra
 ### Sütun Sayısı Tespiti
 
 Bu lab ortamında UNION SELECT NULL sorgusu ile sütun sayısı tespiti yapıldı. Sayfada bulunan kategori sorgusu `'UNION SELECT NULL -- -` ile manipüle edildi ve hata verdiği gözlemlendi.  
-<img width="1185" height="401" alt="{B24E0654-9FF1-4D80-B78D-96C4B6048E78}" src="images/union-sql.png" />
+<img width="1185" height="401" alt="{B24E0654-9FF1-4D80-B78D-96C4B6048E78}" src="../images/union-sql.png" />
 
 NULL sayısı arttırıldığında yani `'UNION SELECT NULL, NULL, NULL -- -` sorgusu yapıldığında hata vermediği ve başarılı bir şekilde sorguda 3 sütun olduğu tespit edildi.
 <img width="1260" height="648" alt="{48845B01-9D67-49E1-9683-ACFB1FFC77B3}" src="https://github.com/user-attachments/assets/5e03ebd5-5de4-40d1-b907-7bc1f5bace1c" />
