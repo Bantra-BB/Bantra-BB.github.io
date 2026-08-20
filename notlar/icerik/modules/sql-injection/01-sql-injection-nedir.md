@@ -1,4 +1,4 @@
-<img width="1168" height="671" alt="{7BCB5938-E5A6-4C7D-92C7-ECBC1DF132B1}" src="https://github.com/user-attachments/assets/1d167984-3a21-47a5-9cd8-8b2b771808c9" /># SQL Injection Nedir?
+# SQL Injection Nedir?
 
 ## Web uygulaması ile veritabanı ilişkisi
 Bir web uygulaması kullanıcıdan veri aldığında (login formu, arama
@@ -125,6 +125,7 @@ Category isteğine burp ile araya girildi ve sorgu `'UNION+SELECT+'abc',+'def'+#
 <img width="1260" height="451" alt="{A0388619-116F-4468-BF1F-D59F0F0AAF52}" src="images/sqli8.png" />
 
 Ardından veri tabanı tipi ve versiyonunu bulmak için `'UNION+SELECT+@@version,+NULL#` payload'ı ile istek manipüle edildi ve istenilen bilgiler elde edildi.
+
 <img width="624" height="353" alt="image" src="images/sqli9.png" />
 
 <img width="1168" height="671" alt="{7BCB5938-E5A6-4C7D-92C7-ECBC1DF132B1}" src="images/sqli10.png" />
