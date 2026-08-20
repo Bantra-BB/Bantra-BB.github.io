@@ -74,12 +74,13 @@ Uygulama genelde ilk satırı (çoğu zaman admin) alıp giriş yaptırır.
 5. Bir SQL sorgusu içinde yürütüldüğünde out-of-band bir ağ etkileşimini tetiklemek üzere tasarlanmış OAST payloadları, ortaya çıkan etkileşimleri izler
 
 ## SQLi Türleri
-1. Error-Based SQLi (Blind)
-2. Union-Based SQLi
-3. Boolean SQLi (Blind)
-4. Time-Based SQLi (Blind)
-5. OOB SQLi
-
+1. Union-Based SQLi
+2. Boolean-Based SQLi / Blind
+3. Error-Based SQLi / Blind
+4. Time-Based SQLi / Blind
+5. OOB SQLi         
+NOT: Blind SQL injection kimi kaynakta ayrı olarak işleniyor. Boolean,Error ve Time Based SQLi metodlarını kapsıyor bu kaynakta karışıklık olmaması ve anlaşılabilinirlik için ayrı ayrı işlenecektir.
+ 
 ## Asıl çözüm: parametreli sorgu (prepared statement)
 ```php
 $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ? AND password = ?");
