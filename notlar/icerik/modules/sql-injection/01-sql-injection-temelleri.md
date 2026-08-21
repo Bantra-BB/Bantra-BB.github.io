@@ -75,11 +75,9 @@ Uygulama genelde ilk satırı (çoğu zaman admin) alıp giriş yaptırır.
 
 ## SQLi Türleri
 1. Union-Based SQLi
-2. Boolean-Based SQLi / Blind
-3. Error-Based SQLi / Blind
-4. Time-Based SQLi / Blind
-5. OOB SQLi         
-NOT: Blind SQL injection kimi kaynakta ayrı olarak işleniyor. Boolean,Error ve Time Based SQLi metodlarını kapsıyor bu kaynakta karışıklık olmaması ve anlaşılabilinirlik için ayrı ayrı işlenecektir.
+2. Error-Based SQLi
+3. Blind SQLi (Boolean-Based, Time-Based)
+4. OOB SQLi         
  
 ## Asıl çözüm: parametreli sorgu (prepared statement)
 ```php
