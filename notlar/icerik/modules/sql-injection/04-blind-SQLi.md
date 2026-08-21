@@ -61,4 +61,5 @@ Welcome Back flag'i tik olan cevap o karakterin hangi değere sahip olduğunu g�
 <img width="1487" height="737" alt="blind-sql7" src="images/blind-sqli7.png" />
 
 Bu işlem her 20 karakter için tekrarlandı (password,2,1), (password,3,1) ... ve şifre elde edildi.
+
 <img width="319" height="92" alt="blind-sql8" src="images/blind-sqli8.png" />
