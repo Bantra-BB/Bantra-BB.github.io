@@ -75,3 +75,14 @@ Son olarak da burp'ün sniper attack modülü kullanılarak Blind SQL Injection 
 <img width="253" height="58" alt="error-based7" src="images/error-based7.png" />
 
 ### Visible Error-Based SQLi
+
+Bu lab'da amaç web uygulamasının hata mesajlarını detaylı bir şekilde döndürmesini kullanılarak administrator kullanıcı bilgilerini ele geçirmek. Bunun için öncelikle hata döndürecek sql sorgusu tetiklendi.
+<img width="1207" height="350" alt="veb-sqli1" src="images/veb-sqli1.png" />
+<img width="1156" height="307" alt="veb-sqli2" src="images/veb-sqli2.png" />
+
+Ardından `CAST()` fonksiyonu ile hata içinde dönüştürülmeye çalışılan "username" değerini görünür hale getirilmeye çalışıldı ancak karakter sınırı bulunduğu için "TrackingId" değerini sildiğim ve bu sefer sorgu çalıştı. "administrator" kullanıcısının tablodaki ilk kullanıcı olduğu anlaşıldı.
+<img width="1217" height="670" alt="veb-sqli3" src="images/veb-sqli3.png" />
+<img width="1217" height="702" alt="veb-sqli4" src="images/veb-sqli4.png" />
+
+Son olarak "administrator" kullanıcısının şifresi elde edildi.
+<img width="1220" height="691" alt="veb-sqli5" src="images/veb-sqli5.png" />
