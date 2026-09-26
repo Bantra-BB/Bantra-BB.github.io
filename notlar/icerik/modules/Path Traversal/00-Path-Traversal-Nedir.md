@@ -1,51 +1,73 @@
-# Path Traversal Nedir?
-Path traversal, üzerinde uygulama çalıştıran bir sunucudan dosya okunmasına sebebiyet veren aynı zamanda "Directory Traversal" olarak da bilinen bir zafiyettir. Bazı durumlarda saldırganlara dosyaların üzerine yazarak uygulama veri veya davranışlarını değiştirerek sunucuda kontrol alma fırsatı da oluşturur.
+# Path Traversal (Directory Traversal)
 
-## Path Traversal ile Dosya Okuma
-Web uygulamalarının önemli bir kısmı, kullanıcıya sunucudaki belirli dosyaları (resim, PDF, döküman) göstermek zorundadır. Bunu yapmanın en basit yolu, kullanıcıdan bir dosya adı almak ve o adı sunucudaki gerçek dosya yoluna eklemektir.
+Path Traversal (dizin gezinme / "dot-dot-slash" saldırısı), bir uygulamanın dosya yolu oluştururken kullanıcı girdisini yeterince doğrulamaması sonucu, saldırganın **web kök dizininin (web root) dışındaki** dosya ve dizinlere erişebilmesidir. OWASP bu zafiyeti **A01:2021 – Broken Access Control** kategorisi altında sınıflandırır.
 
-Bir alışveriş uygulaması düşün — ürün resimlerini şu şekilde gösteriyor:
-```html
-<img src="/loadImage?filename=218.png">
-```
-`loadImage` endpoint'i, `filename` parametresini alıyor ve karşılığındaki dosyanın içeriğini döndürüyor. Resimler sunucuda `/var/www/images/` klasöründe tutuluyor. Uygulama, gelen `filename` değerini bu klasör yoluna ekleyerek gerçek dosya yolunu oluşturuyor:
-```
-/var/www/images/218.png
-```
+Diğer adları: *directory traversal*, *directory climbing*, *backtracking*, *dot-dot-slash*.
 
-Eğer uygulama bu `filename` parametresini **hiç doğrulamıyorsa**, saldırgan normal bir resim adı yerine şunu gönderebilir:
+---
+
+## Nasıl çalışır?
+
+Uygulamalar çoğu zaman bir dosyayı kullanıcıdan gelen parametreye göre sunar:
+
 ```
-https://site.com/loadImage?filename=../../../etc/passwd
-```
-Uygulama bunu aynı mantıkla klasör yoluna ekler:
-```
-/var/www/images/../../../etc/passwd
+https://ornek.com/getFile?file=rapor.pdf
 ```
 
-Şimdi bu yolun nasıl çözümlendiğine bak. `../` dizin ağacında **bir üst seviyeye çık** demek. Üç `../` art arda geldiğinde:
-- 1. `../` → `/var/www/`
-- 2. `../` → `/var/`
-- 3. `../` → `/` (dosya sisteminin köküne çıkılır)
+Sunucu tarafında bu istek genelde şu şekilde bir yola dönüşür:
 
-Kökten sonra gelen `etc/passwd` eklenince, işletim sistemi fiilen şu dosyayı okur:
 ```
-/etc/passwd
-```
-Uygulamacının kastettiği `/var/www/images/` klasörünün tamamen dışına çıkılmış oldu — sunucudaki **herhangi bir dosyaya**, sadece doğru sayıda `../` ile erişilebilir hale geldi.
-
-**Unix'te `/etc/passwd`** klasik hedef çünkü sunucudaki kayıtlı kullanıcıları listeleyen standart bir dosya — zafiyeti kanıtlamak için sık kullanılır (parola hash'i tutmaz artık, modern sistemlerde, ama zafiyetin varlığını net gösterir).
-
-**Windows'ta** hem `/` hem `\` geçerli bir traversal ayırıcısı sayılır:
-```
-https://site.com/loadImage?filename=..\..\..\windows\win.ini
+/var/www/html/files/rapor.pdf
 ```
 
-**Etki neden ciddi?** Sadece resim dosyası okuma zafiyeti gibi görünse de, aynı mekanizma ile şunlara erişilebilir:
-- Uygulamanın kendi kaynak kodu ve config dosyaları (içinde DB şifreleri, API anahtarları olabilir)
-- Arka uç sistemlere ait kimlik bilgileri
-- Hassas işletim sistemi dosyaları
+Eğer uygulama `file` parametresini doğrulamadan doğrudan yola eklerse, saldırgan `../` dizilerini kullanarak dizin ağacında yukarı çıkabilir:
 
-Bazı durumlarda uygulama sadece okumakla kalmayıp **yazmaya** da izin veriyorsa (dosya yükleme, log yazma gibi), saldırgan aynı `../` mantığıyla rastgele bir dosyaya **yazabilir** — bu da uygulama davranışını değiştirmekten sunucunun tamamen ele geçirilmesine kadar gidebilir. Bu ikinci senaryo (write) daha nadir ama fark edildiğinde etkisi read'den çok daha büyük.
+```
+https://ornek.com/getFile?file=../../../../etc/passwd
+```
+
+Bu istek sunucuda şu yola çözülür ve hassas sistem dosyası okunur:
+
+```
+/var/www/html/files/../../../../etc/passwd  →  /etc/passwd
+```
+
+Buradaki temel mantık: her `../` bir üst dizine çıkar. Yeterince `../` eklendiğinde kök dizine (`/`) ulaşılır ve oradan hedef dosyaya inilir. Windows'ta aynı işlem `..\` (ters slash) ile yapılır.
+
+---
+
+## Etki
+
+Zafiyetin ciddiyeti erişilen dosyaya ve işlemin türüne (okuma/yazma) göre değişir:
+
+- **Bilgi ifşası (okuma):** `/etc/passwd`, uygulama kaynak kodu, yapılandırma dosyaları, veritabanı bağlantı bilgileri, SSH özel anahtarları, log dosyaları.
+- **Kimlik bilgisi / anahtar sızıntısı:** parola hash'leri, API anahtarları, session dosyaları.
+- **Dosya yazma:** yazma işlemlerinde dosya üzerine yazma (overwrite), konfigürasyon bozma ve bazı senaryolarda uzaktan kod çalıştırmaya (RCE) zemin hazırlama.
+- **RCE'ye tırmanma:** özellikle Local File Inclusion (LFI) ile birleştiğinde veya CGI gibi çalıştırılabilir dizinlere erişildiğinde koda dönüşebilir (bkz. CVE-2021-41773).
+
+---
+
+## Sık hedeflenen dosyalar
+
+**Linux / Unix**
+
+| Dosya | Neden değerli |
+|---|---|
+| `/etc/passwd` | Kullanıcı listesi — zafiyetin klasik PoC'u |
+| `/etc/shadow` | Parola hash'leri (root gerekir) |
+| `/etc/hosts` | Ağ bilgisi |
+| `~/.ssh/id_rsa` | SSH özel anahtarı |
+| `/proc/self/environ` | Ortam değişkenleri (LFI+RCE için) |
+| Uygulama config'leri | DB parolaları, gizli anahtarlar |
+
+**Windows**
+
+| Dosya | Neden değerli |
+|---|---|
+| `C:\Windows\win.ini` | Varlık testi için tipik PoC |
+| `C:\Windows\System32\drivers\etc\hosts` | Ağ bilgisi |
+| `web.config` | Uygulama yapılandırması, bağlantı dizeleri |
+| `C:\boot.ini` | Eski sistemlerde varlık testi |
 
 ## Lab
 Bu labda amaç `/etc/passwd` dosyasını okumak. Bunun için burp uygulamasını proxy olarak açıp bir sayfaya girdim.
