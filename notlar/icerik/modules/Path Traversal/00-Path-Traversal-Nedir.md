@@ -49,10 +49,10 @@ Bazı durumlarda uygulama sadece okumakla kalmayıp **yazmaya** da izin veriyors
 
 ## Lab
 Bu labda amaç `/etc/passwd` dosyasını okumak. Bunun için burp uygulamasını proxy olarak açıp bir sayfaya girdim.
-<img width="1239" height="1075" alt="image" src="Path-Traversal-Imags/PathT1.png" />
+<img width="1239" height="1075" alt="image" src="Path-Traversal-Images/PathT1.png" />
 
 Giden isteklerde `/image?filename=60.jpg` ifadesi vardı.
-<img width="1596" height="892" alt="PathT2" src="Path-Traversal-Imags/PathT2.png" />
+<img width="1596" height="892" alt="PathT2" src="Path-Traversal-Images/PathT2.png" />
 
 Bu istekte bulunan filename parametresi manipüle edilip `/etc/passwd` okundu. 
-<img width="1597" height="893" alt="PathT3" src="Path-Traversal-Imags/PathT3.png" />
+<img width="1597" height="893" alt="PathT3" src="Path-Traversal-Images/PathT3.png" />
