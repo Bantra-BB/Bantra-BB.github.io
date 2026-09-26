@@ -110,3 +110,29 @@ Bir önceki lab'da olduğu gibi zafiyetli parametre tespit edildi. Ardından `..
 
 Başarısız sonuç alınınca `../` dizilerinin kaldırıldığı gözlemlendi ve tekrarlı bir şekilde bu kaldırma işlemi yapılmama ihtimaline karşın `....//` şeklinde istek tekardan manipüle edildi ve `/etc/passwd` dosyasının okundu.
 <img width="1225" height="668" alt="PathT8" src="Path-Traversal-Images/PathT8.png" />
+
+### Double URL Encoding
+Bir önceki lab'da olduğu gibi zafiyetli parametre tespit edildi. Ardından `../` ile path traversal denendi.
+<img width="1230" height="672" alt="PathT9" src="Path-Traversal-Images/PathT9.png" />
+
+Başarısız sonucun ardından URL Encoding uygulandı ama yine başarısız sonuç alındı.
+<img width="1556" height="667" alt="PathT10" src="Path-Traversal-Images/PathT10.png" />
+
+Tekrardan URL encoding (double URL encoding) uygulandığında bu sefer `/etc/passwd` dosyası başarıyla okundu.
+<img width="1561" height="712" alt="PathT11" src="Path-Traversal-Images/PathT11.png" />
+
+### Base Folder Zorunluluğunu Atlatma
+Bu sefer parametrede `.jpg` dosyasının full path'i gözlemlendi.
+<img width="1223" height="672" alt="PathT12" src="Path-Traversal-Images/PathT12.png" />
+
+
+Full path olması sebebiyle `/var/www/images/` ifadesinin sonuna path traversal uygulandı ve `/etc/passwd` okundu.
+<img width="1214" height="669" alt="PathT13" src="Path-Traversal-Images/PathT13.png" />
+
+
+### Null Byte Injection (`%00`)
+Uygulamada zafiyetli parametre tespit edildi. Ardından `../` ile path traversal denendi. Ancak dosya bulunamadı
+<img width="1220" height="667" alt="PathT14" src="Path-Traversal-Images/PathT14.png" />
+
+Diğer filtre atlatma teknikleri denendiğinde başarısız sonuçlar alındı ve null byte (%00) denendi ve başarı ile dosya okundu.
+<img width="1226" height="667" alt="PathT15" src="Path-Traversal-Images/PathT15.png" />
