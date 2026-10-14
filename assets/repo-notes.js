@@ -62,12 +62,15 @@ function buildTree(paths){
 }
 
 // Ağacı HTML'e çevirir (klasörler <details>, dosyalar link).
-function treeToHTML(node){
+// depth=0 (en üst seviye) açık başlar; alt klasörler kapalı gelir.
+function treeToHTML(node, depth){
+  depth = depth || 0;
   var html = "";
   Object.keys(node.dirs).sort().forEach(function(dir){
-    html += '<details class="tree-folder" open>'
+    var open = depth === 0 ? " open" : "";   // sadece en üst seviye açık
+    html += '<details class="tree-folder"'+ open +'>'
           +   '<summary>'+ pretty(dir) +'</summary>'
-          +   '<div class="tree-inner">'+ treeToHTML(node.dirs[dir]) +'</div>'
+          +   '<div class="tree-inner">'+ treeToHTML(node.dirs[dir], depth + 1) +'</div>'
           + '</details>';
   });
   node.files.sort(function(a,b){ return a.name.localeCompare(b.name); }).forEach(function(f){
