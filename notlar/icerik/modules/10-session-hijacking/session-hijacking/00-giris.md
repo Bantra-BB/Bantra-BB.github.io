@@ -1,0 +1,3 @@
+# Session Hijacking
+
+> *(taslak - doldurulacak)*

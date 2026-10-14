@@ -1,0 +1,3 @@
+# Persistence (Kalicilik)
+
+> *(taslak - doldurulacak)*
