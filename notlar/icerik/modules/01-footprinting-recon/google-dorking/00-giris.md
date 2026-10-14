@@ -1,0 +1,3 @@
+# Google Dorking
+
+> *(taslak - doldurulacak)*
