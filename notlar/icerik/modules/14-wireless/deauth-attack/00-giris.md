@@ -1,0 +1,3 @@
+# Deauthentication Saldirisi
+
+> *(taslak - doldurulacak)*

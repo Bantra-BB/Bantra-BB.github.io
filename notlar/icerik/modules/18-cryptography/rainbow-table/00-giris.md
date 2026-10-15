@@ -1,0 +1,3 @@
+# Rainbow Table
+
+> *(taslak - doldurulacak)*
