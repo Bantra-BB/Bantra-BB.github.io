@@ -1,16 +1,8 @@
 # CSRF — SameSite Cookie ve Atlatma Senaryoları
 
-Bu not, CSRF'ye karşı bir savunma mekanizması olan **SameSite cookie**
-özniteliğini ve yanlış/eksik kullanıldığında nasıl atlatıldığını anlatır. Temel
-saldırı için bkz. `01-saldiri-adimlari.md`, savunma için bkz.
-`02-tespit-ve-savunma.md`.
-
 ## SameSite nedir?
 
-SameSite, bir cookie'nin **cross-site (siteler arası) isteklerde** gönderilip
-gönderilmeyeceğini kontrol eden bir cookie özniteliğidir. CSRF'nin temelinde
-"tarayıcı cookie'yi her isteğe otomatik ekler" mantığı olduğu için, SameSite bu
-otomatik gönderimi kısıtlayarak CSRF'yi doğrudan hedefler. Üç değeri vardır:
+SameSite, bir cookie'nin **cross-site (siteler arası) isteklerde** gönderilip gönderilmeyeceğini kontrol eden bir cookie özniteliğidir. CSRF'nin temelinde "tarayıcı cookie'yi her isteğe otomatik ekler" mantığı olduğu için, SameSite bu otomatik gönderimi kısıtlayarak CSRF'yi doğrudan hedefler. Üç değeri vardır:
 
 | Değer | Davranış | CSRF koruması |
 |---|---|---|
@@ -20,9 +12,7 @@ otomatik gönderimi kısıtlayarak CSRF'yi doğrudan hedefler. Üç değeri vard
 
 ## Senaryo 1 — Lax + GET ile CSRF
 
-**Mantık:** Durum değiştiren bir işlem (ör. logout) **GET** ile tetiklenebiliyorsa
-ve ilgili cookie `Lax` ise, cookie cross-site top-level GET navigasyonunda hâlâ
-gönderilir. Yani Lax, GET ile yapılan işlemleri korumaz.
+**Mantık:** Durum değiştiren bir işlem (ör. logout) **GET** ile tetiklenebiliyorsa ve ilgili cookie `Lax` ise, cookie cross-site top-level GET navigasyonunda hâlâ gönderilir. Yani Lax, GET ile yapılan işlemleri korumaz.
 
 Örnek sunucu tarafı — belirli bir cookie değeri geldiğinde oturumu kapatır:
 
@@ -34,6 +24,7 @@ if ($_COOKIE["logout"] == "xxxxxxx") {
 ```
 
 **Saldırı adımları:**
+
 1. Durum değiştiren işlemin (logout) **GET** ile çağrılabildiğini tespit et.
 2. İlgili cookie'nin `SameSite=Lax` (veya belirtilmemiş) olduğunu doğrula.
 3. İşlemi tetikleyen basit bir bağlantı hazırla:
@@ -42,26 +33,17 @@ if ($_COOKIE["logout"] == "xxxxxxx") {
    <a href="https://hedef-site.com/logout.php" target="_blank">Anket Linki</a>
    ```
 
-4. Kurbanı sosyal mühendislikle bu bağlantıya tıklat. Top-level GET navigasyonu
-   olduğu için `Lax` cookie gönderilir; sunucu isteği meşru sayar ve işlemi yapar
-   (kurban oturumu kapatılır).
+4. Kurbanı sosyal mühendislikle bu bağlantıya tıklat. Top-level GET navigasyonu olduğu için `Lax` cookie gönderilir; sunucu isteği meşru sayar ve işlemi yapar (kurban oturumu kapatılır).
 
-**Eksik olan:** Cookie `Strict` olsaydı cross-site istekte hiç gönderilmez ve
-saldırı çalışmazdı. Ayrıca durum değiştiren işlem GET ile sunulmamalıydı.
+**Eksik olan:** Cookie `Strict` olsaydı cross-site istekte hiç gönderilmez ve saldırı çalışmazdı. Ayrıca durum değiştiren işlem GET ile sunulmamalıydı.
 
 ## Senaryo 2 — Lax + POST (Chrome 2 dakika penceresi) zincirleme
 
-**Arka plan:** Bir cookie `SameSite` özniteliği **belirtilmeden** set edilmişse,
-Chrome bunu varsayılan olarak `Lax` kabul eder — **ancak bir istisnayla**: cookie
-son **2 dakika** içinde set edilmişse, cross-site **top-level POST** isteğinde de
-gönderilir (geçici "Lax+POST" davranışı). Yani yeni set edilmiş, SameSite'sız bir
-cookie, kısa bir pencere boyunca `None` gibi davranır.
+**Arka plan:** Bir cookie `SameSite` özniteliği **belirtilmeden** set edilmişse, Chrome bunu varsayılan olarak `Lax` kabul eder — **ancak bir istisnayla**: cookie son **2 dakika** içinde set edilmişse, cross-site **top-level POST** isteğinde de gönderilir (geçici "Lax+POST" davranışı). Yani yeni set edilmiş, SameSite'sız bir cookie, kısa bir pencere boyunca `None` gibi davranır.
 
-Bu, tek başına POST ile atlatılamayan bir korumayı, cookie'yi **taze set ettiren**
-bir işlemle zincirleyerek aşmayı mümkün kılar.
+Bu, tek başına POST ile atlatılamayan bir korumayı, cookie'yi **taze set ettiren** bir işlemle zincirleyerek aşmayı mümkün kılar.
 
-Örnek hedef — POST ile bir cookie değerini güncelleyen, ama isteğin ilgili cookie'yi
-taşımasını bekleyen bir uç nokta:
+Örnek hedef — POST ile bir cookie değerini güncelleyen, ama isteğin ilgili cookie'yi taşımasını bekleyen bir uç nokta:
 
 ```php
 if (!isset($_COOKIE['isBanned'])) { exit(); }      // cookie yoksa reddet
@@ -71,16 +53,13 @@ if (isset($_POST['isBanned'])) {
 }
 ```
 
-Doğrudan cross-site POST'ta `isBanned` cookie'si gönderilmediği için istek
-reddedilir. Çözüm, cookie'yi taze set ettiren bir işlemi tetikleyip 2 dakikalık
-pencereyi kullanmaktır.
+Doğrudan cross-site POST'ta `isBanned` cookie'si gönderilmediği için istek reddedilir. Çözüm, cookie'yi taze set ettiren bir işlemi tetikleyip 2 dakikalık pencereyi kullanmaktır.
 
 **Saldırı adımları:**
+
 1. Hedef cookie'nin `SameSite` **belirtilmeden** set edildiğini doğrula.
-2. Bu cookie'yi sunucunun **yeniden set ettiği** bir işlem bul (ör. login veya
-   logout sırasında cookie güncelleniyor).
-3. Payload'ı, önce o işlemi tetikleyip (cookie tazelenir) hemen ardından asıl POST
-   isteğini atacak şekilde zincirle:
+2. Bu cookie'yi sunucunun **yeniden set ettiği** bir işlem bul (ör. login veya logout sırasında cookie güncelleniyor).
+3. Payload'ı, önce o işlemi tetikleyip (cookie tazelenir) hemen ardından asıl POST isteğini atacak şekilde zincirle:
 
    ```html
    <script>
@@ -95,22 +74,14 @@ pencereyi kullanmaktır.
    </form>
    ```
 
-4. Kurban payload'ı açtığında: önce cookie'yi tazeleyen sayfa açılır, sonra 2
-   dakikalık pencere içinde cross-site POST gönderilir. Chrome cookie'yi bu pencerede
-   gönderdiği için istek kabul edilir ve cookie değeri güncellenir.
+4. Kurban payload'ı açtığında: önce cookie'yi tazeleyen sayfa açılır, sonra 2 dakikalık pencere içinde cross-site POST gönderilir. Chrome cookie'yi bu pencerede gönderdiği için istek kabul edilir ve cookie değeri güncellenir.
 
 ## Savunma
 
-1. **Hassas/durum cookie'lerinde açıkça `SameSite=Strict` kullan.** Varsayılana
-   (Lax) güvenme; durum değiştiren işlemlere ait cookie'lerde Strict en güvenlisidir.
+1. **Hassas/durum cookie'lerinde açıkça `SameSite=Strict` kullan.** Varsayılana (Lax) güvenme; durum değiştiren işlemlere ait cookie'lerde Strict en güvenlisidir.
 2. **Durum değiştiren işlemi GET ile sunma** — yalnızca POST + anti-CSRF token.
-3. **SameSite'ı tek savunma sayma.** SameSite defense-in-depth'tir; asıl koruma
-   sunucu tarafı **CSRF token**'dır (bkz. `01` ve `02`). Token + Strict birlikte
-   kullanılır.
+3. **SameSite'ı tek savunma sayma.** SameSite defense-in-depth'tir; asıl koruma sunucu tarafı **CSRF token**'dır (bkz. `01` ve `02`). Token + Strict birlikte kullanılır.
 4. **`Secure` ekle** ve cookie'leri yalnızca HTTPS üzerinden gönder.
 
-> Not: Senaryo 2'deki "2 dakika / Lax+POST" davranışı Chrome'un geçiş dönemine ait
-> bir toleranstır; tarayıcı sürümüne göre değişir ve zamanla sıkılaştırılmıştır.
-> Güncel tarayıcılarda her zaman çalışmayabilir — ama SameSite'ı belirtmeden cookie
-> set etmenin neden riskli olduğunu gösterir. Çözüm yine aynı: özniteliği açıkça
-> ayarlamak.
+> Not: Senaryo 2'deki "2 dakika / Lax+POST" davranışı Chrome'un geçiş dönemine ait bir toleranstır; tarayıcı sürümüne göre değişir ve zamanla sıkılaştırılmıştır. Güncel tarayıcılarda her zaman çalışmayabilir — ama SameSite'ı belirtmeden cookie set etmenin neden riskli olduğunu gösterir. Çözüm yine aynı: özniteliği açıkça ayarlamak.
+
