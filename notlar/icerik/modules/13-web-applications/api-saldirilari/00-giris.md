@@ -1,3 +1,0 @@
-# API Saldirilari
-
-> *(taslak - doldurulacak)*

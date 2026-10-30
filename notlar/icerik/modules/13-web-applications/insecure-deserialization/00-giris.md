@@ -1,3 +1,0 @@
-# Insecure Deserialization
-
-> *(taslak - doldurulacak)*
