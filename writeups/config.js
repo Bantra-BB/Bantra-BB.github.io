@@ -4,7 +4,7 @@
    ========================================================= */
 var NOTES_CONFIG = {
   owner:  "Bantra-BB",         // GitHub kullanıcı adın
-  repo:   "Bantra-BB",         // site repon
+  repo:   "Bantra-BB.github.io",         // site repon
   branch: "main",              // dal (branch)
   root:   "writeups/icerik"    // writeup'ların (.md dosyalarının) bulunduğu klasör
 };
