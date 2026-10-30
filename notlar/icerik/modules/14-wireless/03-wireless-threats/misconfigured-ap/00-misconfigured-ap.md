@@ -1,3 +1,0 @@
-# Misconfigured AP
-
-> Yapım aşamasında.

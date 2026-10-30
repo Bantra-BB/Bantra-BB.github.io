@@ -1,3 +1,0 @@
-# Deauthentication / DoS
-
-> Yapım aşamasında.

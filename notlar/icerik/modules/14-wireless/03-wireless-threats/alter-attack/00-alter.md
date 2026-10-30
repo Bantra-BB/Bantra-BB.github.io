@@ -1,3 +1,0 @@
-# aLTEr Attack
-
-> Yapım aşamasında.

@@ -1,3 +1,0 @@
-# Evil Twin
-
-> Yapım aşamasında.

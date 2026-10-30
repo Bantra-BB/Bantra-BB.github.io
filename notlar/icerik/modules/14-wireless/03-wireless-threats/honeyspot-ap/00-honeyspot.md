@@ -1,3 +1,0 @@
-# Honeyspot AP
-
-> Yapım aşamasında.
