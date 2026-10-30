@@ -21,7 +21,7 @@ SSID bir güvenlik mekanizması **değildir**, sadece bir etikettir. AP'yi "gizl
 ## BSSID — AP'nin kimliği
 **BSSID (Basic Service Set Identifier)**, tek bir AP'yi (daha doğrusu AP'nin tek bir radyosunu) tanımlayan 48 bitlik benzersiz kimliktir. Pratikte bu, **AP'nin kablosuz arayüzünün MAC adresidir**: `A4:2B:B0:11:22:33` gibi.
 
-SSID ile BSSID sınavlarda ve sahada en çok karıştırılan ikilidir, ayrımı net tutmak gerekir:
+SSID ile BSSID pratikte en çok karıştırılan ikilidir, ayrımı net tutmak gerekir:
 
 | | SSID | BSSID |
 |---|---|---|
