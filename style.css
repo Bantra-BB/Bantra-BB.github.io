@@ -240,3 +240,16 @@ footer .disclaimer{
 .hljs-meta, .hljs-operator, .hljs-punctuation{ color:var(--muted); }
 .hljs-type, .hljs-class .hljs-title{ color:#5eead4; }
 .hljs-emphasis{ font-style:italic; } .hljs-strong{ font-weight:700; }
+
+/* === Sayfa (ana) kaydırma çubuğu === */
+html{ scrollbar-width: thin; scrollbar-color: var(--accent) transparent; } /* Firefox */
+
+::-webkit-scrollbar{ width:12px; height:12px; }
+::-webkit-scrollbar-track{ background:var(--bg); }
+::-webkit-scrollbar-thumb{
+  background:var(--line);
+  border:3px solid var(--bg);   /* kenardan içeri boşluk, ince görünür */
+  border-radius:10px;
+}
+::-webkit-scrollbar-thumb:hover{ background:var(--accent); }
+::-webkit-scrollbar-corner{ background:var(--bg); }
