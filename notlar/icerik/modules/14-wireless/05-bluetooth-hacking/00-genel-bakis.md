@@ -1,3 +1,0 @@
-# Bluetooth Attacks
-
-> Yapım aşamasında.
