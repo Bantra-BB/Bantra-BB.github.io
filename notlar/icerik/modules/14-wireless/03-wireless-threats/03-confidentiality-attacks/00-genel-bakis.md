@@ -1,3 +1,0 @@
-# Confidentiality Attacks
-
-> Yapım aşamasında.
