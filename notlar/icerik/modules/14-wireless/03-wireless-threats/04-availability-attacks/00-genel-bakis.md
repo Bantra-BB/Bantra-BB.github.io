@@ -1,3 +1,0 @@
-# Availability Attacks
-
-> Yapım aşamasında.
