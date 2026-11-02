@@ -1,3 +1,0 @@
-# Integrity Attacks
-
-> Yapım aşamasında.
